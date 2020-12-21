@@ -16,6 +16,9 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+$router->get('/api', function () use ($router) {
+    return $router->app->version();
+});
 
 // API route group
 $router->group(['prefix' => 'api'], function () use ($router) {
