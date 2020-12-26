@@ -14,6 +14,7 @@
 */
 
 $router->get('/', function () use ($router) {
+    return \App\Models\User::all();
     return $router->app->version();
 });
 $router->get('/api', function () use ($router) {
