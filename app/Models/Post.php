@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
 
 class Post extends Model
 {
-    use Sluggable, SoftDeletes;
+    use Sluggable, SoftDeletes, HasFactory;
+
+    protected $fillable = ['name', 'content'];
+    
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -22,8 +26,6 @@ class Post extends Model
             ]
         ];
     }
-    
-    protected $fillable = ['name', 'content'];
 
     public function getRouteKeyName(){
         return 'slug';

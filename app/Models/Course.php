@@ -3,11 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Course extends Model
 {
-    use SoftDeletes;
+    use Sluggable, SoftDeletes, HasFactory;
+
+    protected $fillable = ['name', 'content'];
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
 
     //has many tags
     public function tags()
@@ -18,7 +36,7 @@ class Course extends Model
     //has many comments
     public function comments()
     {
-    	return $this->morphToMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     //has many category

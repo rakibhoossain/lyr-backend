@@ -8,7 +8,9 @@
         "php": "^7.3|^8.0",
         "cviebrock/eloquent-sluggable": "^8.0",
         "fruitcake/laravel-cors": "^2.0",
+        "irazasyed/larasupport": "^1.7",
         "laravel/lumen-framework": "^8.0",
+        "php-ffmpeg/php-ffmpeg": "^0.17.0",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
