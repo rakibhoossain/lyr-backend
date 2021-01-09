@@ -103,7 +103,7 @@ $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 
-// $app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
+$app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
 $app->register(Spatie\Permission\PermissionServiceProvider::class);
 
 /*
