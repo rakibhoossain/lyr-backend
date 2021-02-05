@@ -63,6 +63,8 @@ $app->configure('app');
 $app->configure('cors');
 $app->configure('sluggable');
 $app->configure('permission');
+
+$app->configure('debugbar');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -101,6 +103,10 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Irazasyed\Larasupport\Providers\ArtisanServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
+
+if (env('APP_DEBUG')) {
+ $app->register(Barryvdh\Debugbar\LumenServiceProvider::class);
+}
 
 
 $app->alias('cache', \Illuminate\Cache\CacheManager::class);  // if you don't have this already
