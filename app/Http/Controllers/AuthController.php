@@ -27,7 +27,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        //validate incoming request 
+        //validate incoming request
         $this->validate($request, [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
@@ -35,7 +35,7 @@ class AuthController extends Controller
         ]);
 
         try {
-           
+
             $user = new User;
             $user->name = $request->input('name');
             $user->email = $request->input('email');
@@ -62,7 +62,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-          //validate incoming request 
+          //validate incoming request
         $this->validate($request, [
             'email' => 'required|string',
             'password' => 'required|string',
@@ -72,6 +72,11 @@ class AuthController extends Controller
 
         if (! $token = Auth::attempt($credentials)) {
             return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        if (! auth()->user()->hasVerifiedEmail()) {
+            auth()->user()->sendEmailVerificationNotification();
+            return response()->json(['message' => 'Please verify your email address before logging in. You may request a new link here [xyz.com] if your verification has expired.'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -92,7 +97,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    
+
     public function logout()
     {
         auth()->logout();
@@ -124,5 +129,5 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60
         ], 200);
     }
-    
+
 }

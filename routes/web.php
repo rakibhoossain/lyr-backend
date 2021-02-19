@@ -14,8 +14,12 @@
 */
 
 $router->get('/', function () use ($router) {
+    dd(debug());
     return \App\Models\User::all();
     return $router->app->version();
+});
+$router->get('/user', function () use ($router) {
+    return \App\Models\User::all();
 });
 $router->get('/api', function () use ($router) {
     return $router->app->version();

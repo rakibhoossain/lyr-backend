@@ -8,6 +8,8 @@
         "php": "^7.3|^8.0",
         "cviebrock/eloquent-sluggable": "^8.0",
         "fruitcake/laravel-cors": "^2.0",
+        "illuminate/mail": "^8.28",
+        "illuminate/notifications": "^8.28",
         "irazasyed/larasupport": "^1.7",
         "laravel/lumen-framework": "^8.0",
         "php-ffmpeg/php-ffmpeg": "^0.17.0",
