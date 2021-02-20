@@ -62,9 +62,9 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-          //validate incoming request
+        //validate incoming request
         $this->validate($request, [
-            'email' => 'required|string',
+            'email' => 'required|string|exists:users,email',
             'password' => 'required|string',
         ]);
 
@@ -75,6 +75,56 @@ class AuthController extends Controller
         }
 
         return $this->respondWithToken($token);
+    }
+
+    //Verify email
+    public function verify(Request $request)
+    {
+        try {
+            if ($request->user()->hasVerifiedEmail()) {
+                return response()->json(['success' => true, 'message' => 'You have already verified email.'], 200);
+            }
+
+            $params = $request->only(['verify_user', 'expired', 'hash']);
+            $fill = array_filter($params);
+            if($fill < 3) throw new \Exception('Invalid verification url');
+
+            $id = $fill['verify_user'];
+            $expired = (integer)$fill['expired'];
+            $hash = $fill['hash'];
+
+            $now = \Carbon\Carbon::now()->getTimestamp();
+            $expired = \Carbon\Carbon::parse($expired)->getTimestamp();
+            if($now > $expired) throw new \Exception('Your email verification link is expired');
+
+            if (! hash_equals((string) $id, (string) $request->user()->getKey())) throw new \Exception('Invalid email verification URL.');
+
+            if(! hash_equals((string) $hash, sha1($request->user()->getEmailForVerification()))) throw new \Exception('Invalid email verification URL.');
+
+            if ($request->user()->markEmailAsVerified()) {
+                return response()->json(['success' => true, 'message' => 'Email verified successfully!.'], 200);
+            }
+
+            throw new \Exception('Email verification failed!');
+
+        }catch(\Exception $e){
+            return response()->json(['message' => $e->getMessage()], 409);
+        }
+    }
+
+    /**
+     * Resend the email verification notification.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function resend(Request $request)
+    {
+        if ($request->user()->hasVerifiedEmail()) {
+            return response()->json(['success' => true, 'message' => 'You have already verified email.'], 200);
+        }
+
+        $request->user()->sendEmailVerificationNotification();
+        return response()->json(['success' => true, 'message' => 'Verification Email sent successfully!.'], 200);
     }
 
     /**

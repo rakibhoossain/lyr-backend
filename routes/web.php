@@ -30,6 +30,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->group(['prefix' => 'auth'], function () use ($router) {
         $router->post('login', 'AuthController@login');
+        $router->post('verify', 'AuthController@verify');
+        $router->post('resend', 'AuthController@resend');
         $router->post('logout', 'AuthController@logout');
         $router->post('register', 'AuthController@register');
         $router->post('refresh', 'AuthController@refresh');

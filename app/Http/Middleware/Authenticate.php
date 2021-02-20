@@ -38,6 +38,9 @@ class Authenticate
         if ($this->auth->guard($guard)->guest()) {
             return response('Unauthorized.', 401);
         }
+        $is_verify_url = request()->is(['*auth/verify*', '*auth/resend*']);
+        if($is_verify_url) return $next($request);
+
 
         if (! auth()->user()->hasVerifiedEmail()) {
             auth()->user()->sendEmailVerificationNotification();
