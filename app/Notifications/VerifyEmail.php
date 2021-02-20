@@ -7,7 +7,6 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\URL;
 
 class VerifyEmail extends Notification
 {
@@ -49,7 +48,6 @@ class VerifyEmail extends Notification
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
         }
-
         return $this->buildMailMessage($verificationUrl);
     }
 
@@ -80,16 +78,15 @@ class VerifyEmail extends Notification
             return call_user_func(static::$createUrlCallback, $notifiable);
         }
 
-        return 'your-url';
+        $url = rtrim(env('APP_TARGET_URL', url('/')), '/');
+        $parameters = [
+            'verify_user'   => $notifiable->getKey(),
+            'expired'       => Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60))->getTimestamp(),
+            'hash'          => sha1($notifiable->getEmailForVerification()),
+        ];
+        $tail = http_build_query($parameters);
 
-        // return URL::temporarySignedRoute(
-        //     'verification.verify',
-        //     Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
-        //     [
-        //         'id' => $notifiable->getKey(),
-        //         'hash' => sha1($notifiable->getEmailForVerification()),
-        //     ]
-        // );
+        return $url.'/verify?'.$tail;
     }
 
     /**

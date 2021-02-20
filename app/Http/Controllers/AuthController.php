@@ -74,11 +74,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        if (! auth()->user()->hasVerifiedEmail()) {
-            auth()->user()->sendEmailVerificationNotification();
-            return response()->json(['message' => 'Please verify your email address before logging in. You may request a new link here [xyz.com] if your verification has expired.'], 401);
-        }
-
         return $this->respondWithToken($token);
     }
 

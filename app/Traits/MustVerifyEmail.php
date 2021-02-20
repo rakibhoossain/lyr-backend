@@ -39,6 +39,30 @@ trait MustVerifyEmail
     }
 
     /**
+     * get Otp.
+     *
+     * @return String
+     */
+    public function getOtp()
+    {
+        return ($this->otp)? $this->otp : null;
+    }
+
+    /**
+     * set Otp.
+     *
+     * @return bool
+     */
+    public function setOtp()
+    {
+        $random = str_shuffle('AS32553DFGZWX0927466043161QPONM');
+        $opt = substr($random,1,6);
+        return $this->forceFill([
+            'otp' => $opt,
+        ])->save();
+    }
+
+    /**
      * Get the email address that should be used for verification.
      *
      * @return string
