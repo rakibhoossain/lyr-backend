@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
-use  App\User;
+use  App\Models\User;
 
 class UserController extends Controller
 {
@@ -34,7 +34,7 @@ class UserController extends Controller
      */
     public function allUsers()
     {
-         return response()->json(['users' =>  User::all()], 200);
+         return response()->json(['users' =>  User::get()], 200);
     }
 
     /**

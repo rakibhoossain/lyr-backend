@@ -14,7 +14,6 @@
 */
 
 $router->get('/', function () use ($router) {
-    dd(debug());
     return \App\Models\User::all();
     return $router->app->version();
 });
